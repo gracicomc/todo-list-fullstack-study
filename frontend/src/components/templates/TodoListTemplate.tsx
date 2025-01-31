@@ -1,6 +1,6 @@
 import { UserInfo } from "../organisms/UserInfo";
 import { AddTaskForm } from "../organisms/AddTaskForm";
-import { TaskList } from "../organisms/TaskList";
+import TaskList from "../organisms/TaskList";
 
 interface Task {
   id: string;

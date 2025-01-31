@@ -1,30 +1,33 @@
-import { TaskItem } from "../molecules/TaskItem";
+import { useQuery } from "@tanstack/react-query";
+import { fetchTasks } from "@/services/tasks/tasks.service";
+import { Tasks } from "@/types/tasks/tasks.types";
+import { TaskItem } from "@/components/molecules/TaskItem";
 
-interface Task {
-  id: string;
-  description: string;
-  completed: boolean;
-}
+const TaskList = () => {
+  const {
+    data: tasks,
+    error,
+    isLoading: isFetching,
+  } = useQuery({
+    queryKey: ["tasks"],
+    queryFn: fetchTasks,
+  });
 
-interface TaskListProps {
-  tasks: Task[];
-  onToggle: (id: string) => void;
-  onDelete: (id: string) => void;
-}
+  if (isFetching) return <p>Loading tasks...</p>;
+  if (error) return <p>Error loading tasks.</p>;
 
-export function TaskList({ tasks, onToggle, onDelete }: TaskListProps) {
   return (
     <div className="space-y-2">
-      {tasks.map((task) => (
+      {tasks?.map((task: Tasks) => (
         <TaskItem
           key={task.id}
           id={task.id}
-          description={task.description}
+          description={task.title}
           completed={task.completed}
-          onToggle={onToggle}
-          onDelete={onDelete}
         />
       ))}
     </div>
   );
-}
+};
+
+export default TaskList;
